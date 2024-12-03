@@ -1,0 +1,29 @@
+.board {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 30px;
+    gap: 15px;
+    background-color: #273849;
+    border-radius: 35px;
+}
+  
+.column {
+    display: grid;
+    gap: 15px;
+}
+  
+.cell {
+    width: 75px;
+    height: 75px;
+    border: 1px solid black;
+    border-radius: 50%;
+    background-color: #101b27;
+}
+  
+.cell.p1 {
+    background-color: #18bc9c;
+}
+  
+.cell.p2 {
+    background-color: #ee6677;
+}
