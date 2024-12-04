@@ -3,6 +3,9 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+    padding: 10px;
+    border-bottom: #273849 12px solid;
+    border-radius: 14px;
 }
 
 button, .active{

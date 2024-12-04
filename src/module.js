@@ -7,7 +7,7 @@ class node {
     }
 }
 
-function minimax(node, depth, maxmizingPlayer) {
+export function minimax(node, depth, maxmizingPlayer) { //p1 is maxmizing player
     let value;
     if (depth === 0 || isTerminal(node.state)) {
         return heuristic(node)
@@ -84,7 +84,7 @@ const max =(a, b) => a >= b? a:b;
 const min =(a, b) => a <= b? a:b;
 
 
-function minimaxPruning(node, depth, maxmizingPlayer,alpha = -9999999, beta = 9999999) {
+export function minimaxPruning(node, depth, maxmizingPlayer,alpha = -9999999, beta = 9999999) {
     let value;
     if (depth === 0 || isTerminal(node)) {
         return heuristic(node)
