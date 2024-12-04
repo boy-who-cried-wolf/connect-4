@@ -1,15 +1,22 @@
 import { useState } from "react";
 import './board.css'
-export default function Board({ currentPlayer, switchPlayer }){
-    const [board, setBoard] = useState(Array(7).fill().map(() => Array(6).fill(0)));
+import { calcScore } from "./module";
+export default function Board({ gameState, setGameState }){
 
     const handleColumnClick = (colIndex) => {
-        const newBoard = board.map(column => [...column]); // Deep copy the board
+        const newBoard = gameState.board.map(column => [...column]); // Deep copy the board
         for (let row = 5; row >= 0; row--) {
           if (newBoard[colIndex][row] === 0) {
-            newBoard[colIndex][row] = currentPlayer;
-            setBoard(newBoard);
-            switchPlayer(currentPlayer)
+            newBoard[colIndex][row] = gameState.currentPlayer;
+            let newScore = calcScore(newBoard)
+            setGameState({
+              ...gameState,
+              board: newBoard,
+              score: newScore,
+              currentPlayer: gameState.currentPlayer === 1? 2:1
+            }
+            )
+            
             break;
           }
         }
@@ -18,7 +25,7 @@ export default function Board({ currentPlayer, switchPlayer }){
 
     return(
         <div className="board">
-      {board.map((column, colIndex) => (
+      {gameState.board.map((column, colIndex) => (
         <div className="column" key={colIndex} onClick={() => handleColumnClick(colIndex)}>
           {column.map((cell, rowIndex) => (
             <div

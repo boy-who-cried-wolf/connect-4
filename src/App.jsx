@@ -1,18 +1,22 @@
 import { useState } from 'react'
 import './App.css'
 import Board from './Board'
+import { firstState } from "./module";
 
 function App() {
-  const [score, setScore] = useState({p1:0, p2:0})
-  const [currentPlayer, setCurrentPlayer] = useState(1)
+  const [gameState, setGameState] = useState({
+    board: firstState,
+    score: {p1:0, p2:0},
+    currentPlayer: 1
+  })
 
 
   return (
     <>
-      <h1>Score {score.p1} - {score.p2}</h1>
+      <h1>Score {gameState.score.p1} - {gameState.score.p2}</h1>
       <Board
-        currentPlayer = { currentPlayer }
-        switchPlayer = { (current) => setCurrentPlayer(current === 1? 2:1) }
+        gameState = { gameState }
+        setGameState = { setGameState }
       />
     </>
   )
