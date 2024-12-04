@@ -2,13 +2,19 @@ import { useState } from 'react'
 import './App.css'
 import Board from './Board'
 import { firstState } from "./module";
+import Settings from './Settings';
 
 function App() {
   const [gameState, setGameState] = useState({
     board: firstState,
     score: {p1:0, p2:0},
     currentPlayer: 1
-  })
+  });
+  const [settings, setSettings] = useState({
+    player: 2,
+    k: 8,
+    pronning: true
+  });
 
 
   return (
@@ -17,6 +23,10 @@ function App() {
       <Board
         gameState = { gameState }
         setGameState = { setGameState }
+      />
+      <Settings
+        settings = { settings }
+        setSettings = { setSettings }
       />
     </>
   )
