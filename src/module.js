@@ -1,40 +1,44 @@
-class node {
-    constructor(state, parent, children, value) {
+export class Node {
+    constructor(state, player, parent = undefined, children = [], value = undefined) {
         this.state = state
         this.parent = parent
         this.children = children
         this.value = value
+        this.player = player
     }
 }
 
 export function minimax(node, depth, maxmizingPlayer) { //p1 is maxmizing player
     let value;
-    if (depth === 0 || isTerminal(node.state)) {
-        return heuristic(node)
+    if (depth == 0 || isTerminal(node.state)) {
+        node.value = heuristic(node)
+        return node.value
     }
-    if (maxmizingPlayer) {
+    else if (maxmizingPlayer) {
         value = -9999999;
         node.children.forEach(child => {
             value = max(value, minimax(child, depth-1, false))
         });
-        return value
+        node.value = value
+        return node.value
     }
     else{
         value = 9999999
         node.children.forEach(child => {
             value = min(value, minimax(child, depth-1, true))
         });
-        return value
+        node.value = value
+        return node.value
     }
 }
 
-function isTerminal(board){
-    board.forEach((col) =>{
+function isTerminal(board) {
+    for (const col of board) {
         if (col[0] === 0) {
-            return false
+            return false;
         }
-    })
-    return true
+    }
+    return true;
 }
 
 export const firstState = Array(7).fill().map(() => Array(6).fill(0))
@@ -78,6 +82,8 @@ export function calcScore(board) {
 }
 
 function heuristic(node) {
+    let score =calcScore(node.state);
+    return (score.p1 - score.p2)
 }
 
 const max =(a, b) => a >= b? a:b;
@@ -87,7 +93,8 @@ const min =(a, b) => a <= b? a:b;
 export function minimaxPruning(node, depth, maxmizingPlayer,alpha = -9999999, beta = 9999999) {
     let value;
     if (depth === 0 || isTerminal(node)) {
-        return heuristic(node)
+        node.value = heuristic(node);
+        return node.value
     }
     if (maxmizingPlayer) {
         value = -9999999;
@@ -95,10 +102,12 @@ export function minimaxPruning(node, depth, maxmizingPlayer,alpha = -9999999, be
             value = max(value, minimax(child, depth-1, false, alpha, beta))
             alpha = max( alpha, value)
             if (beta <= alpha){
-                return value
+                node.value = value;
+                return node.value
             }
         });
-        return value
+        node.value = value;
+        return node.value
     }
     else{
         value = 9999999
@@ -110,5 +119,42 @@ export function minimaxPruning(node, depth, maxmizingPlayer,alpha = -9999999, be
             }
         });
         return value
+    }
+}
+
+export function buildTree(node, k) {
+    if (k == 0) {
+        return node
+    }
+    node.children = getchildren(node, node.player === 1? 2:1);
+    if (node.children.length === 0) {
+        return node
+    }
+    node.children.forEach((child) => {
+        (buildTree(child, k-1, child.player === 1? 2:1))
+    });
+    return node
+}
+
+function getchildren(node, nextPlayer) {
+    let children = [];
+    for (let col = 6; col >= 0; col--) {
+        for (let row = 5; row >= 0; row--) {
+            if (node.state[col][row] === 0) {
+                let newBoard = node.state.map(column => [...column]);
+                newBoard[col][row] = node.player;
+                children.push(new Node(newBoard, nextPlayer));
+                break;
+            }
+        }
+    }
+    return children
+}
+
+export function nextMove(node){
+    for(const child of node.children){
+        if (child.value === node.value) {
+            return child
+        }
     }
 }

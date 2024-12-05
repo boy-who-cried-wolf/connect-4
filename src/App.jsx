@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Board from './Board'
-import { firstState, calcScore } from "./module";
+import { firstState, calcScore, Node, minimax, buildTree, nextMove, minimaxPruning } from "./module";
 import Settings from './Settings';
 
 function App() {
@@ -12,26 +12,25 @@ function App() {
   });
   const [settings, setSettings] = useState({
     player: 2,
-    k: 8,
+    k: 5,
     pronning: true
   });
 
   if (gameState.currentPlayer  == settings.player) {
-    const newBoard = gameState.board.map(column => [...column]); // Deep copy the board
-        for (let row = 5; row >= 0; row--) {
-          if (newBoard[0][row] === 0) {
-            newBoard[0][row] = gameState.currentPlayer;
-            let newScore = calcScore(newBoard)
-            setGameState({
-              ...gameState,
-              board: newBoard,
-              score: newScore,
-              currentPlayer: gameState.currentPlayer === 1? 2:1
-            }
-            )
-            break;
-          }
-        }
+    const start = buildTree(new Node(gameState.board.map(column => [...column]),
+      gameState.currentPlayer),
+    settings.k);
+    settings.pronning === true? minimax(start, settings.k, gameState.currentPlayer === 1? true:false)
+    : minimaxPruning(start, settings.k, gameState.currentPlayer === 1? true:false)
+    let nextNode = nextMove(start)
+    //const newBoard = gameState.board.map(column => [...column]); // Deep copy the board
+    let newScore = calcScore(nextNode.state);
+    setGameState({
+      ...gameState,
+      board: nextNode.state,
+      score: newScore,
+      currentPlayer: gameState.currentPlayer === 1? 2:1
+    });
   }
 
 
