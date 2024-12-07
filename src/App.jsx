@@ -42,11 +42,11 @@ function App() {
       {/* Circle color based on player */}
       <circle
         r={10}
-        fill={nodeDatum.player === 1 ? "#18bc9c" : "#ee6677"} // Green for Player 1, Red for Player 2
+        fill={nodeDatum.player === 1 ? "#18bc9c" : "#ee6677"}
         onClick={toggleNode}
       />
       {/* Node label */}
-      <text fill='white' x={20} dy={10}>
+      <text fill='#fff' x={20} dy={10}>
         Value: {nodeDatum.value}
       </text>
     </g>
