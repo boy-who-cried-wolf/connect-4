@@ -3,7 +3,7 @@ import './App.css'
 import Board from './Board'
 import { firstState, calcScore, Node, minimax, buildTree, nextMove, minimaxPruning } from "./module";
 import Settings from './Settings';
-import NodeView from './NodeView';
+import Tree from 'react-d3-tree';
 
 function App() {
   const [gameState, setGameState] = useState({
@@ -37,6 +37,21 @@ function App() {
     }
   },[gameState.currentPlayer, settings]);
 
+  const renderNode = ({ nodeDatum, toggleNode }) => (
+    <g>
+      {/* Circle color based on player */}
+      <circle
+        r={10}
+        fill={nodeDatum.player === 1 ? "#18bc9c" : "#ee6677"} // Green for Player 1, Red for Player 2
+        onClick={toggleNode}
+      />
+      {/* Node label */}
+      <text fill='white' x={20} dy={10}>
+        Value: {nodeDatum.value}
+      </text>
+    </g>
+  );
+
   return (
     <>
       <h1>Score {gameState.score.p1} - {gameState.score.p2}</h1>
@@ -48,7 +63,18 @@ function App() {
         settings = { settings }
         setSettings = { setSettings }
       />
-      {gameState.node !== null && <NodeView node={gameState.node} />}
+      {gameState.node !== null && (
+        <div className="view">
+          <Tree
+            data={gameState.node}
+            orientation="vertical"
+            collapsible={true}
+            initialDepth={2}
+            nodeSize={{ x: 200, y: 50 }}
+            renderCustomNodeElement={(rd3tProps) => renderNode(rd3tProps)} // Custom node rendering
+          />
+        </div>
+      )}
     </>
   )
 }
