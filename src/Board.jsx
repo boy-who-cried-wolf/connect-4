@@ -1,7 +1,8 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import './board.css'
-import { calcScore } from "./module";
-export default function Board({ gameState, setGameState }){
+import { calcScore, Node, minimax, buildTree, nextMove, minimaxPruning } from "./module";
+export default function Board({ gameState, setGameState, settings }){
 
     const handleColumnClick = (colIndex) => {
         const newBoard = gameState.board.map(column => [...column]); // Deep copy the board
@@ -21,6 +22,26 @@ export default function Board({ gameState, setGameState }){
           }
         }
       };
+
+      useEffect( () => {
+        if (gameState.currentPlayer  == settings.player) {
+          const start = buildTree(new Node(gameState.board.map(column => [...column]),
+            gameState.currentPlayer),
+          settings.k);
+          settings.pronning === true? minimax(start, settings.k, gameState.currentPlayer === 1? true:false)
+          : minimaxPruning(start, settings.k, gameState.currentPlayer === 1? true:false)
+          let nextNode = nextMove(start)
+          
+          let newScore = calcScore(nextNode.state);
+          setGameState({
+            ...gameState,
+            board: nextNode.state,
+            score: newScore,
+            currentPlayer: gameState.currentPlayer === 1? 2:1,
+            node: start
+          });
+        }
+      },[gameState.currentPlayer, settings]);
       
 
     return(

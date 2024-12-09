@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import Board from './Board'
-import { firstState, calcScore, Node, minimax, buildTree, nextMove, minimaxPruning } from "./module";
+import { firstState } from "./module";
 import Settings from './Settings';
 import Tree from 'react-d3-tree';
 
@@ -17,25 +17,6 @@ function App() {
     k: 5,
     pronning: true
   });
-  useEffect( () => {
-    if (gameState.currentPlayer  == settings.player) {
-      const start = buildTree(new Node(gameState.board.map(column => [...column]),
-        gameState.currentPlayer),
-      settings.k);
-      settings.pronning === true? minimax(start, settings.k, gameState.currentPlayer === 1? true:false)
-      : minimaxPruning(start, settings.k, gameState.currentPlayer === 1? true:false)
-      let nextNode = nextMove(start)
-      
-      let newScore = calcScore(nextNode.state);
-      setGameState({
-        ...gameState,
-        board: nextNode.state,
-        score: newScore,
-        currentPlayer: gameState.currentPlayer === 1? 2:1,
-        node: start
-      });
-    }
-  },[gameState.currentPlayer, settings]);
 
   const renderNode = ({ nodeDatum, toggleNode }) => (
     <g>
@@ -58,6 +39,7 @@ function App() {
       <Board
         gameState = { gameState }
         setGameState = { setGameState }
+        settings = { settings }
       />
       <Settings
         settings = { settings }
