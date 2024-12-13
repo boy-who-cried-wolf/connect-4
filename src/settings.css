@@ -1,0 +1,19 @@
+.settings{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: #273849 12px solid;
+    border-radius: 14px;
+    max-width: 700px;
+    margin-bottom: 20px;
+}
+
+button, .active{
+    background-color: #18bc9c;
+}
+
+button, .inactive{
+    background-color: #ee6677;
+}
