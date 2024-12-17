@@ -28,7 +28,7 @@ export default function Board({ gameState, setGameState, settings }){
           const start = buildTree(new Node(gameState.board.map(column => [...column]),
             gameState.currentPlayer),
           settings.k);
-          settings.pronning === true? minimax(start, settings.k, gameState.currentPlayer === 1? true:false)
+          settings.pronning === false? minimax(start, settings.k, gameState.currentPlayer === 1? true:false)
           : minimaxPruning(start, settings.k, gameState.currentPlayer === 1? true:false)
           let nextNode = nextMove(start)
           

@@ -153,7 +153,7 @@ function positionalScore(board, player, weightMatrix) {
 
 export function minimaxPruning(node, depth, maximizingPlayer, alpha = -Infinity, beta = Infinity) {
     let value;
-    if (depth === 0 || isTerminal(node)) {
+    if (depth === 0 || isTerminal(node.state)) {
         node.value = heuristic(node);
         return node.value
     }
@@ -176,9 +176,11 @@ export function minimaxPruning(node, depth, maximizingPlayer, alpha = -Infinity,
             value = Math.min(value, minimax(child, depth-1, true))
             alpha = Math.max(alpha, value)
             if (beta <= alpha){
+                node.value = value;
                 return value
             }
         });
+        node.value = value;
         return value
     }
 }
