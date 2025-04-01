@@ -17,6 +17,7 @@ function App() {
     k: 5,
     pronning: true
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const renderNode = ({ nodeDatum, toggleNode }) => (
     <g>
@@ -36,10 +37,17 @@ function App() {
   return (
     <>
       <h1>Score {gameState.score.p1} - {gameState.score.p2}</h1>
+      {isLoading && (
+        <div className="loading-screen">
+          <div className="loading-spinner"></div>
+          <p>AI is thinking...</p>
+        </div>
+      )}
       <Board
         gameState = { gameState }
         setGameState = { setGameState }
         settings = { settings }
+        setIsLoading = { setIsLoading }
       />
       <Settings
         settings = { settings }
@@ -53,7 +61,7 @@ function App() {
             collapsible={true}
             initialDepth={2}
             nodeSize={{ x: 200, y: 50 }}
-            renderCustomNodeElement={(rd3tProps) => renderNode(rd3tProps)} // Custom node rendering
+            renderCustomNodeElement={(rd3tProps) => renderNode(rd3tProps)}
           />
         </div>
       )}
